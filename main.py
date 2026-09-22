@@ -8,7 +8,6 @@ from email.mime.multipart import MIMEMultipart
 from amazon_scraper import get_amazon_product
 from gemini_writer import generate_review_article
 
-# Clean Amazon product links
 SAMPLE_AMAZON_URLS = [
     "[https://www.amazon.com/dp/B0CL5KNB9M](https://www.amazon.com/dp/B0CL5KNB9M)",
     "[https://www.amazon.com/dp/B0BSHF7WH3](https://www.amazon.com/dp/B0BSHF7WH3)",
@@ -16,10 +15,15 @@ SAMPLE_AMAZON_URLS = [
 ]
 
 def clean_url(url):
-    # Removes markdown formatting or square brackets if present
-    cleaned = re.sub(r'[\[\]\(\)]', '', url).strip()
-    match = re.search(r'https?://[^\s]+', cleaned)
-    return match.group(0) if match else url
+    # Extracts only the first valid URL if duplicated
+    match = re.search(r'https?://[^\s<"]+', url)
+    if match:
+        clean = match.group(0)
+        # Fix doubled URLs if present
+        if "https://" in clean[8:]:
+            clean = "https://" + clean[8:].split("https://")[0]
+        return clean
+    return url
 
 def extract_seo_title(html_content, fallback_title):
     match = re.search(r'<h[12][^>]*>(.*?)</h[12]>', html_content, re.IGNORECASE)
