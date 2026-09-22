@@ -1,10 +1,27 @@
 import random
 
+# Real Amazon Products with valid ASINs & Images
 HIGH_SEARCH_TECH_KEYWORDS = [
-    {"title": "Best Noise Canceling Wireless Earbuds 2026", "url": "https://www.amazon.com/dp/B0CX23VJPZ", "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600"},
-    {"title": "Top Smartwatches with Long Battery Life 2026", "url": "https://www.amazon.com/dp/B0CHX1W1XY", "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600"},
-    {"title": "Best Portable Bluetooth Speakers 2026", "url": "https://www.amazon.com/dp/B0BSHF7WH3", "image": "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=600"},
-    {"title": "Top Ergonomic Wireless Gaming Mouse 2026", "url": "https://www.amazon.com/dp/B0C3322Y3X", "image": "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=600"}
+    {
+        "title": "Sony WF-1000XM5 Truly Wireless Noise Canceling Earbuds 2026",
+        "url": "https://www.amazon.com/dp/B0C33XXS56",
+        "image": "https://m.media-amazon.com/images/I/5144XvS8fAL._AC_SL1200_.jpg"
+    },
+    {
+        "title": "Apple AirPods Pro (2nd Generation) Wireless Earbuds 2026",
+        "url": "https://www.amazon.com/dp/B0C9C5B28M",
+        "image": "https://m.media-amazon.com/images/I/61SUj2aKoEL._AC_SL1500_.jpg"
+    },
+    {
+        "title": "JBL Flip 6 Portable Bluetooth Speaker 2026",
+        "url": "https://www.amazon.com/dp/B09G3ZH93C",
+        "image": "https://m.media-amazon.com/images/I/718bI3q8e9L._AC_SL1500_.jpg"
+    },
+    {
+        "title": "Logitech MX Master 3S Wireless Performance Mouse 2026",
+        "url": "https://www.amazon.com/dp/B09HM94VDS",
+        "image": "https://m.media-amazon.com/images/I/61ni3t1ryQL._AC_SL1500_.jpg"
+    }
 ]
 
 def get_high_search_product():
