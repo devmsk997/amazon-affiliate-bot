@@ -35,8 +35,11 @@ def generate_review_article(product_data, cluster_info):
     """
 
     target_model = "gemini-3.6-flash"
-    for attempt in range(1, 6):
+    max_retries = 3
+
+    for attempt in range(1, max_retries + 1):
         try:
+            print(f"Generating content using {target_model} (Attempt {attempt})...")
             response = client.models.generate_content(
                 model=target_model,
                 contents=prompt,
@@ -48,7 +51,14 @@ def generate_review_article(product_data, cluster_info):
                     content = img_header + content
                 return content
         except Exception as e:
-            print(f"Gemini API attempt {attempt} failed ({e}). Waiting {attempt * 10}s...")
-            time.sleep(attempt * 10)
+            err_msg = str(e)
+            print(f"Attempt {attempt} failed: {err_msg}")
+            
+            # Quota delay logic: Rate limit/Quota hit হলে ৬০ সেকেন্ড ওয়েট করবে
+            if "429" in err_msg or "RESOURCE_EXHAUSTED" in err_msg:
+                print("Quota limit reached for today or per minute rate limit hit. Waiting 60 seconds...")
+                time.sleep(60)
+            else:
+                time.sleep(15)
 
     return ""
