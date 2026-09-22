@@ -25,12 +25,12 @@ def generate_review_article(product_data, cluster_info):
     Target SEO Keywords: {keywords}
 
     Strict Requirements:
-    1. Output MUST start immediately with the <img> tag so Blogger detects it as Featured Image:
-       <p><img src="{img_url}" alt="{title}" style="max-width:100%; height:auto; display:block; margin:0 auto 20px auto; border-radius:8px;"></p>
+    1. Output MUST start immediately with the primary featured <img> tag for Blogger thumbnail rendering:
+       <p><img src="{img_url}" alt="{title}" width="600" style="max-width:100%; height:auto; display:block; margin:0 auto 20px auto; border-radius:8px;"></p>
     2. Year context MUST strictly be 2026.
-    3. Return raw HTML inside <div> without markdown code blocks (no ```html).
+    3. Return raw HTML inside <div> without markdown code blocks.
     4. Structure: <h2> Title, Introduction, Key Specifications Table, Key Features, Pros & Cons, Verdict.
-    5. Include a prominent CTA button linking to {affiliate_url}:
+    5. Include a high-converting CTA button linking to {affiliate_url}:
        <a href="{affiliate_url}" target="_blank" style="background:#FF9900; color:#fff; padding:14px 28px; text-decoration:none; font-weight:bold; border-radius:5px; display:inline-block; margin:20px 0;">Check Lowest Price on Amazon</a>
     """
 
@@ -44,7 +44,7 @@ def generate_review_article(product_data, cluster_info):
             if response and response.text:
                 content = response.text.replace("```html", "").replace("```", "").strip()
                 if "<img" not in content[:300]:
-                    img_header = f'<p><img src="{img_url}" alt="{title}" style="max-width:100%; height:auto; display:block; margin:0 auto 20px auto; border-radius:8px;"></p>\n'
+                    img_header = f'<p><img src="{img_url}" alt="{title}" width="600" style="max-width:100%; height:auto; display:block; margin:0 auto 20px auto; border-radius:8px;"></p>\n'
                     content = img_header + content
                 return content
         except Exception as e:
