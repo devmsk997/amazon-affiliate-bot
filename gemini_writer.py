@@ -23,7 +23,7 @@ def generate_review_article(product_data):
 
     try:
         response = client.models.generate_content(
-            model="gemini-3.6-flash",
+            model="gemini-2.5-flash",
             contents=prompt,
         )
         return response.text
