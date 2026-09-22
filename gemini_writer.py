@@ -25,10 +25,10 @@ def generate_review_article(product_data):
 
     Strict Rules:
     1. Output ONLY valid HTML inside <div>. Do not use ```html code block markers.
-    2. Make a catchy, SEO-friendly article Title inside an <h2> tag at the start.
+    2. Make a catchy, SEO-friendly article Title inside an <h2> tag at the top.
     3. Include the main image using <img src="{img_url}" alt="{title}" style="max-width:100%; height:auto; display:block; margin: 0 auto 20px auto; border-radius:8px;"> right after title.
     4. Structure with <h2>, <h3>, bullet points, and a specifications comparison table.
-    5. Add a prominent Call-To-Action (CTA) button linking to: {affiliate_url}
+    5. Add a prominent, beautiful Call-To-Action (CTA) button linking to: {affiliate_url} with text "Check Price on Amazon".
 
     Structure to follow:
     - Main Title (H2)
@@ -38,12 +38,12 @@ def generate_review_article(product_data):
     - Key Features & Benefits (Bullet points)
     - Pros & Cons
     - Final Verdict & Buying Recommendation
-    - Buy Now Button (Styled with CSS)
+    - Buy Now Button (Styled with CSS: background #FF9900, text white, padding 12px 24px, display inline-block, border-radius 5px)
     """
 
-    # Model definition
-    target_model = "gemini-3.6-flash"
-    max_retries = 5
+    # Using the stable Gemini model
+    target_model = "gemini-1.5-flash"
+    max_retries = 3
 
     print(f"Generating content with model: {target_model}")
     for attempt in range(max_retries):
@@ -57,7 +57,7 @@ def generate_review_article(product_data):
                 print("Article generated successfully!")
                 return content
         except Exception as e:
-            print(f"Attempt {attempt + 1}/{max_retries} failed ({e}). Waiting 15s...")
-            time.sleep(15)
+            print(f"Attempt {attempt + 1}/{max_retries} failed ({e}). Waiting 5s...")
+            time.sleep(5)
 
     return ""
