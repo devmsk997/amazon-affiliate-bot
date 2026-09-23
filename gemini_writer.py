@@ -34,8 +34,8 @@ def generate_review_article(product_data, cluster_info):
        <a href="{affiliate_url}" target="_blank" style="background:#FF9900; color:#fff; padding:14px 28px; text-decoration:none; font-weight:bold; border-radius:5px; display:inline-block; margin:20px 0;">Check Lowest Price on Amazon</a>
     """
 
-    # সঠিক ও কার্যকরী মডেলের নাম দেওয়া হলো
-    target_model = "gemini-2.5-flash"
+    # গুগলের অফিশিয়াল নির্দেশ অনুযায়ী gemini-3.6-flash দেওয়া হলো
+    target_model = "gemini-3.6-flash"
     max_retries = 3
 
     for attempt in range(1, max_retries + 1):
