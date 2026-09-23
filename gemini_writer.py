@@ -34,7 +34,8 @@ def generate_review_article(product_data, cluster_info):
        <a href="{affiliate_url}" target="_blank" style="background:#FF9900; color:#fff; padding:14px 28px; text-decoration:none; font-weight:bold; border-radius:5px; display:inline-block; margin:20px 0;">Check Lowest Price on Amazon</a>
     """
 
-    target_model = "gemini-3.6-flash"
+    # সঠিক ও কার্যকরী মডেলের নাম দেওয়া হলো
+    target_model = "gemini-2.5-flash"
     max_retries = 3
 
     for attempt in range(1, max_retries + 1):
@@ -54,7 +55,7 @@ def generate_review_article(product_data, cluster_info):
             err_msg = str(e)
             print(f"Attempt {attempt} failed: {err_msg}")
             
-            # Quota delay logic: Rate limit/Quota hit হলে ৬০ সেকেন্ড ওয়েট করবে
+            # Quota delay logic: Rate limit/Quota hit হলে ৬০ সেকেন্ড ওয়েট করবে
             if "429" in err_msg or "RESOURCE_EXHAUSTED" in err_msg:
                 print("Quota limit reached for today or per minute rate limit hit. Waiting 60 seconds...")
                 time.sleep(60)
