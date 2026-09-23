@@ -1,26 +1,26 @@
 import random
 
-# Real Amazon Products with Reliable Direct Images
+# Real Amazon Products with Official Amazon Direct Images
 HIGH_SEARCH_TECH_KEYWORDS = [
     {
         "title": "Sony WF-1000XM5 Truly Wireless Noise Canceling Earbuds 2026",
         "url": "https://www.amazon.com/dp/B0C33XXS56",
-        "image": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&auto=format&fit=crop&q=80"
+        "image": "https://m.media-amazon.com/images/I/61aB432S44L._AC_SL1500_.jpg"
     },
     {
         "title": "Apple AirPods Pro (2nd Generation) Wireless Earbuds 2026",
         "url": "https://www.amazon.com/dp/B0C9C5B28M",
-        "image": "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=800&auto=format&fit=crop&q=80"
+        "image": "https://m.media-amazon.com/images/I/61SUj2aKoEL._AC_SL1500_.jpg"
     },
     {
         "title": "JBL Flip 6 Portable Bluetooth Speaker 2026",
         "url": "https://www.amazon.com/dp/B09G3ZH93C",
-        "image": "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=800&auto=format&fit=crop&q=80"
+        "image": "https://m.media-amazon.com/images/I/71R2RAtGf4L._AC_SL1500_.jpg"
     },
     {
         "title": "Logitech MX Master 3S Wireless Performance Mouse 2026",
         "url": "https://www.amazon.com/dp/B09HM94VDS",
-        "image": "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=800&auto=format&fit=crop&q=80"
+        "image": "https://m.media-amazon.com/images/I/61ni3t1ryQL._AC_SL1500_.jpg"
     }
 ]
 
