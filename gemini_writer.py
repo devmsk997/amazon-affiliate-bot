@@ -3,12 +3,14 @@ import time
 from google import genai
 from google.genai.errors import APIError
 
-def generate_seo_review(title):
+def generate_review_article(product_data, cluster_info=None):
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise ValueError("❌ জেমিনি এপিআই কি (API Key) এনভায়রনমেন্ট ভেরিয়েবলে পাওয়া যায়নি!")
 
     client = genai.Client(api_key=api_key)
+
+    title = product_data.get('title', 'Tech Product') if isinstance(product_data, dict) else str(product_data)
 
     prompt = f"""
     আপনি একজন এসইও (SEO) বাংলা টেক ব্লগ রাইটার। নিচের প্রোডাক্টটির জন্য একটি সংক্ষিপ্ত ও আকর্ষণীয় রিভিউ পোস্ট লিখুন।
