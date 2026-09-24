@@ -3,14 +3,20 @@ import time
 from google import genai
 from google.genai.errors import APIError
 
-def generate_review_article(product_data, cluster_info=None):
+def generate_review_article(product_data):
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise ValueError("❌ জেমিনি এপিআই কি (API Key) এনভায়রনমেন্ট ভেরিয়েবলে পাওয়া যায়নি!")
 
     client = genai.Client(api_key=api_key)
 
+    # প্রোডাক্টের ডেটা থেকে টাইপ, ইমেজ এবং আসল ইউআরএল সংগ্রহ করা
     title = product_data.get('title', 'Tech Product') if isinstance(product_data, dict) else str(product_data)
+    url = product_data.get('url', '#') if isinstance(product_data, dict) else '#'
+    img_url = product_data.get('image', '') if isinstance(product_data, dict) else ''
+    
+    # আপনার অ্যাফিলিয়েট ট্যাগ যুক্ত লিংক
+    affiliate_url = f"{url}?tag=bddeals996-20" if url != '#' else '#'
 
     prompt = f"""
     আপনি একজন এসইও (SEO) বাংলা টেক ব্লগ রাইটার। নিচের প্রোডাক্টটির জন্য একটি সংক্ষিপ্ত ও আকর্ষণীয় রিভিউ পোস্ট লিখুন।
@@ -26,14 +32,16 @@ def generate_review_article(product_data, cluster_info=None):
         - <h2>আমাদের চূড়ান্ত মতামত</h2>
     """
 
-    # আপনার নির্দিষ্ট করে দেওয়া ফ্রি-টিয়ার মডেলগুলোর তালিকা
+    # ফ্রি-টিয়ার মডেলগুলোর তালিকা
     free_models = [
         "gemini-3.8-flash",
         "gemini-3.5-flash-lite",
         "gemini-3.6-flash"
     ]
 
-    # ফ্রি ভার্সনে কোনো অবস্থাতেই ফেইল না করার জন্য মাল্টি-সাইকেল ফলব্যাক লুপ
+    generated_text = ""
+
+    # ফ্রি ভার্সনে ফলব্যাক লুপ
     for cycle in range(1, 6):
         for model_name in free_models:
             for attempt in range(1, 3):
@@ -46,16 +54,14 @@ def generate_review_article(product_data, cluster_info=None):
                     )
                     
                     if response and response.text:
-                        print(f"✅ সফল! {model_name} মডেল ব্যবহার করে সম্পূর্ণ ফ্রি-তে কন্টেন্ট তৈরি করা হয়েছে।")
-                        return response.text
-                        
+                        print(f"✅ সফল! {model_name} মডেল ব্যবহার করে কন্টেন্ট তৈরি করা হয়েছে।")
+                        generated_text = response.text
+                        break
                 except APIError as e:
                     print(f"⚠️ এপিআই এরর - {model_name} (কোড {e.code}): {e.message}")
                     if e.code == 429:
-                        print(f"⏳ ফ্রি কোটা লিমিট (429) পার হয়েছে। ২০ সেকেন্ড অপেক্ষা করে পরবর্তী ফ্রি মডেলে যাওয়া হচ্ছে...")
                         time.sleep(20)
                     elif e.code == 503 or "high demand" in str(e).lower():
-                        print(f"⏳ সার্ভার ব্যস্ত (503)। ৮ সেকেন্ড অপেক্ষা করা হচ্ছে...")
                         time.sleep(8)
                     else:
                         time.sleep(3)
@@ -64,8 +70,26 @@ def generate_review_article(product_data, cluster_info=None):
                     print(f"⚠️ অপ্রত্যাশিত সমস্যা {model_name} এ: {e}")
                     time.sleep(3)
                     break
-
-        print(f"🔄 সাইকেল {cycle} সম্পন্ন হয়েছে। পুনরায় ফ্রি মডেলগুলোতে চেষ্টা চালানো হচ্ছে...")
+            if generated_text:
+                break
+        if generated_text:
+            break
+        print(f"🔄 সাইকেল {cycle} সম্পন্ন হয়েছে। পুনরায় চেষ্টা করা হচ্ছে...")
         time.sleep(10)
 
-    raise Exception("❌ বর্তমানে সমস্ত ফ্রি মডেলের কোটা লিমিটেড বা অতিরিক্ত ব্যস্ত রয়েছে। কিছুক্ষণ পর আবার গিটহাব অ্যাকশন রান করুন।")
+    if not generated_text:
+        raise Exception("❌ বর্তমানে সমস্ত ফ্রি মডেলের কোটা লিমিটেড বা অতিরিক্ত ব্যস্ত রয়েছে।")
+
+    # আসল প্রোডাক্ট ইমেজ এবং আপনার অ্যাফিলিয়েট লিংকসহ আকর্ষণীয় বাটন তৈরি
+    img_tag = f'<p><img src="{img_url}" alt="{title}" width="600" style="max-width:100%; height:auto; display:block; margin:0 auto 20px auto; border-radius:8px;"></p>' if img_url else ''
+    
+    cta_button = f'''
+    <div style="text-align:center; margin:30px 0;">
+        <a href="{affiliate_url}" target="_blank" style="background:#FF9900; color:#fff; padding:14px 28px; text-decoration:none; font-weight:bold; border-radius:5px; display:inline-block; font-size:16px;">Check Lowest Price on Amazon</a>
+    </div>
+    '''
+
+    # ফাইনাল পোস্ট স্ট্রাকচার (ইমেজ + রিভিউ টেক্সট + অ্যাফিলিয়েট বাটন)
+    final_html = f"{img_tag}\n{generated_text}\n{cta_button}"
+    
+    return final_html
