@@ -3,19 +3,19 @@ import time
 from google import genai
 from google.genai.errors import APIError
 
-def generate_review_article(product_data):
+def generate_review_article(product_data, cluster_info=None):
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise ValueError("❌ জেমিনি এপিআই কি (API Key) এনভায়রনমেন্ট ভেরিয়েবলে পাওয়া যায়নি!")
 
     client = genai.Client(api_key=api_key)
 
-    # প্রোডাক্টের ডেটা থেকে টাইপ, ইমেজ এবং আসল ইউআরএল সংগ্রহ করা
+    # Produc-er data theke title, image ebong url ber kora
     title = product_data.get('title', 'Tech Product') if isinstance(product_data, dict) else str(product_data)
     url = product_data.get('url', '#') if isinstance(product_data, dict) else '#'
     img_url = product_data.get('image', '') if isinstance(product_data, dict) else ''
     
-    # আপনার অ্যাফিলিয়েট ট্যাগ যুক্ত লিংক
+    # Affiliate tag jukto link
     affiliate_url = f"{url}?tag=bddeals996-20" if url != '#' else '#'
 
     prompt = f"""
@@ -32,7 +32,7 @@ def generate_review_article(product_data):
         - <h2>আমাদের চূড়ান্ত মতামত</h2>
     """
 
-    # ফ্রি-টিয়ার মডেলগুলোর তালিকা
+    # Free-tier model-gular talika
     free_models = [
         "gemini-3.8-flash",
         "gemini-3.5-flash-lite",
@@ -41,7 +41,7 @@ def generate_review_article(product_data):
 
     generated_text = ""
 
-    # ফ্রি ভার্সনে ফলব্যাক লুপ
+    # Free version-e fallback loop
     for cycle in range(1, 6):
         for model_name in free_models:
             for attempt in range(1, 3):
@@ -80,7 +80,7 @@ def generate_review_article(product_data):
     if not generated_text:
         raise Exception("❌ বর্তমানে সমস্ত ফ্রি মডেলের কোটা লিমিটেড বা অতিরিক্ত ব্যস্ত রয়েছে।")
 
-    # আসল প্রোডাক্ট ইমেজ এবং আপনার অ্যাফিলিয়েট লিংকসহ আকর্ষণীয় বাটন তৈরি
+    # Original product image ebong affiliate link shoh CTA button toiri
     img_tag = f'<p><img src="{img_url}" alt="{title}" width="600" style="max-width:100%; height:auto; display:block; margin:0 auto 20px auto; border-radius:8px;"></p>' if img_url else ''
     
     cta_button = f'''
@@ -89,7 +89,7 @@ def generate_review_article(product_data):
     </div>
     '''
 
-    # ফাইনাল পোস্ট স্ট্রাকচার (ইমেজ + রিভিউ টেক্সট + অ্যাফিলিয়েট বাটন)
+    # Final HTML structure
     final_html = f"{img_tag}\n{generated_text}\n{cta_button}"
     
     return final_html
